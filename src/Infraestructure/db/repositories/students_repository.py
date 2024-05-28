@@ -5,7 +5,7 @@ from uuid import uuid4
 class StudentsRepository:
 
     @classmethod
-    def insert_student(cls, first_name: str, last_name: str, age: int) -> None: 
+    def insert_student(cls, first_name: str, last_name: str, age: int, affinity: str, grimoire_id: str) -> None: 
         with DBConnectionHandler() as database:
             session = database.get_session()
             try:
@@ -13,12 +13,15 @@ class StudentsRepository:
                     id = uuid4(),
                    first_name = first_name, 
                    last_name = last_name,
-                   age = age     
+                   age = age ,
+                   affinity = affinity,
+                   grimoire_id = grimoire_id
                 )
                 session.add(new_registry)
                 session.commit()
             except Exception as exception:
                 session.rollback()
+                print(f"Error occurred while inserting student: {exception}")
                 raise Exception
 
 
