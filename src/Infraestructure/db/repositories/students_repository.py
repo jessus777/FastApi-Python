@@ -20,3 +20,40 @@ class StudentsRepository:
             except Exception as exception:
                 session.rollback()
                 raise Exception
+
+
+    @classmethod
+    def get_students(cls) -> any:
+        with DBConnectionHandler() as database:
+            session = database.get_session()
+            try:
+                students = (
+                    session
+                    .query(StudentsEntity)
+                    .all()
+
+                )
+                return students
+            except Exception as exception:
+                session.rollback()
+                raise Exception 
+            
+    @classmethod
+    def delete_student_by_id(cls, id: str) -> None:
+        with DBConnectionHandler() as database:
+            session = database.get_session()
+            try:
+                student_to_delete = (
+                    session
+                    .query(StudentsEntity)
+                    .filter_by(id = id)
+                    .first()
+                )
+                if student_to_delete:
+                    session.delete(student_to_delete)
+                    session.commit()
+
+            except Exception as exception:
+                session.rollback()
+                raise Exception 
+
