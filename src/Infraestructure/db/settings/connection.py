@@ -1,19 +1,22 @@
-import pyodbc
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 class DBConnectionHandler:
-
     def __init__(self) -> None:
-        self.__connection = self.__create_database_engine()
-        pass
+        self.__connection_string = 'mssql+pyodbc://localhost\\SQLEXPRESS/test_database2?driver=ODBC+Driver+17+for+SQL+Server&trusted_connection=yes'
+        self.__engine = create_engine(self.__connection_string)
+        self.__Session = sessionmaker(bind=self.__engine)
+        self.session = None
 
+    def __enter__(self):
+        self.session = self.__Session()
+        return self
 
-    def __create_database_engine(self):
-        conn = pyodbc.connect(
-            'DRIVER={ODBC Driver 17 for SQL Server};'
-            'SERVER=localhost\\SQLEXPRESS;'
-            'DATABASE=test_database2;'
-            'Trusted_Connection=yes;'
-        )
-        return conn
-    
-    def get_connection(self):
-        return self.__connection
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if self.session:
+            self.session.close()
+
+    def get_session(self):
+        return self.session
+
+    def get_engine(self):
+        return self.__engine
