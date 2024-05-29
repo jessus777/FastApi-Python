@@ -1,9 +1,12 @@
+from typing import List
 from src.Infraestructure.db.settings.connection import  DBConnectionHandler 
 from src.Infraestructure.db.entities.requests import Request as RequestEntity
+from src.data.interfaces.request_repository import RequestsRepositoryInterface
+from src.domain.models.request import Request
 from uuid import uuid4
 from sqlalchemy.exc import SQLAlchemyError
 
-class RequestsRepository:
+class RequestsRepository(RequestsRepositoryInterface):
     @classmethod
     def insert_request(cls, student_id: str, status: str) -> None: 
         with DBConnectionHandler() as database:
@@ -27,14 +30,14 @@ class RequestsRepository:
         with DBConnectionHandler() as database:
             session = database.get_session()
             try:
-                grimoire = (
+                request = (
                     database.session
                     .query(RequestEntity)
                     .filter_by(id = id)
                     .first()
                     
                 )
-                return grimoire
+                return request
             except SQLAlchemyError as exception:
                 session.rollback()
                 raise Exception(f"Error fetching request by ID: {str(exception)}") 
@@ -76,3 +79,19 @@ class RequestsRepository:
             except Exception as exception:
                 session.rollback()
                 raise Exception(f"Error deleting grimoire: {str(exception)}")
+            
+    @classmethod
+    def get_request_all(cls) -> List[Request]:
+        with DBConnectionHandler() as database:
+            session = database.get_session()
+            try:
+                reuqest = (
+                    database.session
+                    .query(RequestEntity)
+                    .all()
+                    
+                )
+                return reuqest
+            except SQLAlchemyError as exception:
+                session.rollback()
+                raise Exception(f"Error fetching request by ID: {str(exception)}")
