@@ -7,4 +7,5 @@ class RequestAll(RequestAllInterface):
         self.__request_repository = request_repository
 
     def all(self) -> Dict:
+        self.__request_repository.get_request_all()
         pass
