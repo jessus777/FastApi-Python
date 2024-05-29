@@ -2,6 +2,7 @@ from sqlalchemy import Column, String, Integer, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from src.Infraestructure.db.settings.base import Base
+from .students import Student
 import uuid 
 
 class Request(Base):
@@ -12,7 +13,7 @@ class Request(Base):
     status = Column(String, nullable=False)
 
     # Relationship to Student
-    student = relationship("Student", back_populates="requests")
+    student = relationship("Student")
 
     def __repr__(self):
-        return f"Request [id={self.id}, student_id={self.student_id}, status={self.status}]"
+        return f"Requests [id={self.id}, student_id={self.student_id}, status={self.status}]"
