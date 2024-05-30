@@ -1,8 +1,11 @@
+from typing import List
 from src.Infraestructure.db.settings.connection import  DBConnectionHandler 
 from src.Infraestructure.db.entities.students import Student as StudentsEntity
+from src.data.interfaces.students_repository import StudentsRepositoryInterface
+from src.domain.models.students import Students
 from uuid import uuid4
 
-class StudentsRepository:
+class StudentsRepository(StudentsRepositoryInterface):
 
     @classmethod
     def insert_student(cls, first_name: str, last_name: str, age: int, affinity: str, grimoire_id: str) -> None: 
@@ -26,7 +29,7 @@ class StudentsRepository:
 
 
     @classmethod
-    def get_students(cls) -> any:
+    def get_students(cls) -> List[Students]:
         with DBConnectionHandler() as database:
             session = database.get_session()
             try:

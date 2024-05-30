@@ -1,8 +1,11 @@
+from typing import List
 from src.Infraestructure.db.settings.connection import  DBConnectionHandler 
 from src.Infraestructure.db.entities.grimoires import Grimoire as GrimoireEntity
+from src.data.interfaces.grimoire_repository import GrimoiresRepositoryInterface
+from src.domain.models.grimorios import Grimoires
 from uuid import uuid4
 
-class GrimoiresRepository:
+class GrimoiresRepository(GrimoiresRepositoryInterface):
     @classmethod 
     def insert_grimoires(cls, name: str, level: int) -> None: 
         with DBConnectionHandler() as database:
@@ -39,7 +42,7 @@ class GrimoiresRepository:
             
             
     @classmethod
-    def get_grimoires_list(cls) -> any:
+    def get_grimoires_list(cls) ->List[Grimoires]:
         with DBConnectionHandler() as database:
             session = database.get_session()
             try:

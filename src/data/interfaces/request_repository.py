@@ -15,6 +15,7 @@ class RequestsRepositoryInterface(ABC):
     
     @abstractmethod
     def delete_request_by_id(self, id: str) -> None: pass
+    
     @abstractmethod
     def get_request_all(cls) -> List[Request]: pass
 
